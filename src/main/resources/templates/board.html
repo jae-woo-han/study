@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="/fragments/head :: head">
+
+</head>
+<body>
+<header>게시판 - 목록</header>
+<nav>
+  <div>
+    <form action="" method="get" id="searchForm">
+      등록일
+      <input type="date" name="fromDt">
+      <input type="date" name="toDt">
+      <select name="category">
+        <option value=""></option>
+      </select>
+      <input type="text" name="searchMessage">
+      <input type="hidden" name="page" id="pageInput">
+      <button>검색</button>
+    </form>
+  </div>
+</nav>
+<main>
+  <div></div>
+  <div>
+    <div class="flex-container flex-container--column">
+      <div class="flex-container__row flex-container__row--header">
+        <div class="flex-container__row-item--category">카테고리</div>
+        <div class="flex-container__row-item--file"></div>
+        <div class="flex-container__row-item--title">제목</div>
+        <div class="flex-container__row-item--writer">작성자</div>
+        <div class="flex-container__row-item--count">조회수</div>
+        <div class="flex-container__row-item--date">등록일시</div>
+        <div class="flex-container__row-item--date">수정일시</div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="page-nav">
+      <a href='#' onclick="">
+        <i class="fa-solid fa-angles-left"></i>
+      </a>
+      <a href='#' onclick="">
+        <i class="fa-solid fa-angle-left"></i>
+      </a>
+      <div class="page-nav__list">
+        <a href='#' onclick=""></a>
+      </div>
+      <a href='#' onclick="">
+        <i class="fa-solid fa-angle-right"></i>
+      </a>
+      <a href='#' onclick="">
+        <i class="fa-solid fa-angles-right"></i>
+      </a>
+    </div>
+  </div>
+  <div class="flex-container flex-container--align-right">
+    <a href="">등록</a>
+  </div>
+</main>
+</body>
+</html>
