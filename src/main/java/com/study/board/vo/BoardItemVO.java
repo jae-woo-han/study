@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class BoardItemVO {
     private int postId;
     private String categoryName;
-    private boolean isFile;
+    private int fileCount;
     private String title;
     private String writer;
     private LocalDateTime writeDt;

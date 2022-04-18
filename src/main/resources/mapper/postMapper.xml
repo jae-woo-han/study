@@ -3,8 +3,45 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.study.board.repository.PostRepository">
-    <select id="selectAll" resultType="BoardItemVO">
-        select *
-        from post_info
+    <select id="selectBoardViewList" resultType="BoardItemVO" parameterType="PostSearchForm">
+        select
+        po.post_id
+        , ca.category_name
+        , (select count(*) from file_info fi
+        where fi.post_id = po.post_id) as
+        file_count
+        , po.title
+        , po.post_content
+        , po.writer
+        , po.write_dt
+        , po.update_dt
+        from post_info po
+        inner join
+        category_info ca
+        on (po.category_id = ca.category_id)
+        <where>
+            <if test="postId != null and postId >0">
+                po.post_id = #{postId}
+            </if>
+            <if test="fromDt != null">
+                and po.write_dt <![CDATA[>=]]>
+                #{fromDt}
+                and po.write_dt <![CDATA[<=]]>
+                #{toDt}
+            </if>
+            <if test="categoryId != null and categoryId >0">
+                and po.category_id = #{categoryId}
+            </if>
+            <if test="searchMessage != null">
+                and po.title like '%#{searchMessage}%'
+                and po.post_content
+                like '%#{searchMessage}%'
+                and po.writer like '%#{searchMessage}%'
+            </if>
+        </where>
+        order by po.write_dt desc
+        <if test="start != null and start >0">
+            limit ${start}, 10;
+        </if>
     </select>
 </mapper>

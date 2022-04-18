@@ -1,13 +1,11 @@
 package com.study.board.repository;
 
 import com.study.board.vo.BoardItemVO;
+import com.study.board.vo.PostSearchForm;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
@@ -25,8 +23,11 @@ class PostRepositoryTest {
     PostRepository postRepository;
 
     @Test
-    void selectAll() {
-        List<BoardItemVO> list = postRepository.selectAll();
-        assertEquals("sample",list.get(0).getTitle());
+    void selectBoardViewList() {
+        PostSearchForm form = PostSearchForm
+                .builder()
+                .build();
+        List<BoardItemVO> list = postRepository.selectBoardViewList(form);
+        assertEquals("제목",list.get(0).getTitle());
     }
 }
