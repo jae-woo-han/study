@@ -8,3 +8,6 @@ spring:
     password: akfldk1elql
 mybatis:
   type-aliases-package: com.study.board.vo
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: mapper/*.xml
