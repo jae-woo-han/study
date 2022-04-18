@@ -2,6 +2,7 @@ package com.study.board.repository;
 
 import com.study.board.vo.BoardItemVO;
 import com.study.board.vo.PostSearchForm;
+import com.study.board.vo.PostViewVO;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,12 @@ class PostRepositoryTest {
                 .builder()
                 .build();
         List<BoardItemVO> list = postRepository.selectBoardViewList(form);
-        assertEquals("제목",list.get(0).getTitle());
+        assertEquals(47,list.get(0).getPostCount());
+    }
+
+    @Test
+    void selectPostOne(){
+        PostViewVO post = postRepository.selectPostOne(1);
+        assertEquals("sample",post.getTitle());
     }
 }
