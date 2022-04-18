@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 @Data
 public class BoardItemVO {
     private int postId;
-    private int postCount;
     private String categoryName;
     private int fileCount;
     private String title;

@@ -29,7 +29,7 @@ class PostRepositoryTest {
                 .builder()
                 .build();
         List<BoardItemVO> list = postRepository.selectBoardViewList(form);
-        assertEquals(47,list.get(0).getPostCount());
+        assertEquals(47,list.size());
     }
 
     @Test

@@ -6,7 +6,7 @@ import lombok.Data;
 public class PageVO<T> {
     private int totalCount;
     private int totalPage;
-    private int currentPage;
+    private int currentPage=1;
     private T data;
 
     public int getTotalCount() {

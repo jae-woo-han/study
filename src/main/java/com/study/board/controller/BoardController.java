@@ -34,6 +34,8 @@ public class BoardController {
         List<BoardItemVO> postList = postRepository.selectBoardViewList(searchForm);
 
         PageVO<List<BoardItemVO>> pageVO = new PageVO<>();
+        pageVO.setData(postList);
+        pageVO.setTotalCount(postList.size());
         model.addAttribute("postList",postList);
         return "board";
     }

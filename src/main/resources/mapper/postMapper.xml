@@ -6,7 +6,6 @@
     <select id="selectBoardViewList" resultType="BoardItemVO" parameterType="PostSearchForm">
         select
         po.post_id
-        , count(po.post_id) as post_count
         , ca.category_name
         , (select count(*) from file_info fi
         where fi.post_id = po.post_id) as
