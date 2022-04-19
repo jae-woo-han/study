@@ -31,15 +31,14 @@
             <if test="categoryId != null and categoryId >0">
                 and po.category_id = #{categoryId}
             </if>
-            <if test="searchMessage != null">
-                and po.title like '%#{searchMessage}%'
-                and po.post_content
-                like '%#{searchMessage}%'
-                and po.writer like '%#{searchMessage}%'
+            <if test="searchMessage != null and searchMessage != ''">
+                and po.title like concat('%',#{searchMessage},'%')
+                or po.post_content like concat('%',#{searchMessage},'%')
+                or po.writer like concat('%',#{searchMessage},'%')
             </if>
         </where>
         order by po.write_dt desc
-        <if test="start != null and start >0">
+        <if test="start != null">
             limit ${start}, 10;
         </if>
     </select>
@@ -75,10 +74,10 @@
             <if test="categoryId != null and categoryId >0">
                 and po.category_id = #{categoryId}
             </if>
-            <if test="searchMessage != null">
-                or po.title like '%#{searchMessage}%'
-                or po.post_content like '%#{searchMessage}%'
-                or po.writer like '%#{searchMessage}%'
+            <if test="searchMessage != null and searchMessage != ''">
+                and po.title like concat('%',#{searchMessage},'%')
+                or po.post_content like concat('%',#{searchMessage},'%')
+                or po.writer like concat('%',#{searchMessage},'%')
             </if>
         </where>
     </select>

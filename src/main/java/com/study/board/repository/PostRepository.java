@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface PostRepository {
 
-    public List<BoardItemVO> selectBoardViewList(PostSearchForm postSearchForm);
-    public int selectPostCount(PostSearchForm postSearchForm);
-    public PostViewVO selectPostOne(int postId);
+    List<BoardItemVO> selectBoardViewList(PostSearchForm postSearchForm);
+    int selectPostCount(PostSearchForm postSearchForm);
+    PostViewVO selectPostOne(int postId);
 }

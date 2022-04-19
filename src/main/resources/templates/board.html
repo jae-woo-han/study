@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:include="/fragments/head :: head">
+<th:block th:replace="/fragments/head :: headFragment"></th:block>
 
-</head>
 <body>
 <header>게시판 - 목록</header>
 <nav>
@@ -11,11 +10,11 @@
       등록일
       <input type="date" name="fromDt">
       <input type="date" name="toDt">
-      <select name="category">
-        <option value=""></option>
+      <select name="categoryId">
+        <option value="1"></option>
       </select>
       <input type="text" name="searchMessage">
-      <input type="hidden" name="page" id="pageInput">
+      <input type="hidden" name="start" id="start">
       <button>검색</button>
     </form>
   </div>
@@ -33,30 +32,46 @@
         <div class="flex-container__row-item--date">등록일시</div>
         <div class="flex-container__row-item--date">수정일시</div>
       </div>
+      <div class="flex-container__row" th:each="post : ${postList.data}">
+        <div class="flex-container__row-item--category" th:text="${post.categoryName}"></div>
+        <div class="flex-container__row-item--file" th:text="${post.fileCount}"></div>
+        <div class="flex-container__row-item--title" th:text="${post.title}"></div>
+        <div class="flex-container__row-item--writer" th:text="${post.writer}"></div>
+        <div class="flex-container__row-item--count" th:text="${post.viewCount}"></div>
+        <div class="flex-container__row-item--date" th:text="${post.writeDt}"></div>
+        <div class="flex-container__row-item--date" th:text="${post.updateDt}"></div>
+      </div>
     </div>
   </div>
   <div>
     <div class="page-nav">
-      <a href='#' onclick="">
+      <button th:attr="onclick=|movePageNum(1)|">
         <i class="fa-solid fa-angles-left"></i>
-      </a>
-      <a href='#' onclick="">
+      </button>
+      <button th:attr="onclick=|movePageNum('${postList.currentPage-1}')|">
         <i class="fa-solid fa-angle-left"></i>
-      </a>
-      <div class="page-nav__list">
-        <a href='#' onclick=""></a>
+      </button>
+      <div class="page-nav__list" th:each="index : ${#numbers.sequence(1,postList.totalPage+1)}">
+        <button th:attr="onclick=|movePageNum('${index}')|" th:text="${index}"></button>
       </div>
-      <a href='#' onclick="">
+      <button th:attr="onclick=|movePageNum('${postList.currentPage+1}')|">
         <i class="fa-solid fa-angle-right"></i>
-      </a>
-      <a href='#' onclick="">
+      </button>
+      <button th:attr="onclick=|movePageNum('${postList.totalPage}')|">
         <i class="fa-solid fa-angles-right"></i>
-      </a>
+      </button>
     </div>
   </div>
   <div class="flex-container flex-container--align-right">
     <a href="">등록</a>
   </div>
+  <script type="text/javascript">
+    function movePageNum(pageNum) {
+      const form = document.querySelector("#searchForm");
+      form.start.value = pageNum;
+      form.submit();
+    }
+  </script>
 </main>
 </body>
 </html>

@@ -8,12 +8,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
-
+@Transactional
 @Controller
 public class BoardController {
     private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
@@ -31,15 +34,20 @@ public class BoardController {
     }
     @RequestMapping("/board")
     public String moveBoardPage(Model model,PostSearchForm searchForm){
+        logger.debug("searchForm :"+searchForm);
+        int pageNum = searchForm.getStart();
+        searchForm.setStart((pageNum>0)?(pageNum-1)*10:0);
         PageVO<List<BoardItemVO>> pageVO = getPageVO(searchForm);
+        if(pageNum>0) pageVO.setCurrentPage(pageNum);
         model.addAttribute("postList",pageVO);
         return "board";
     }
     @RequestMapping("/board/{pageNum}")
-    public String selectPage(Model model,PostSearchForm searchForm,@PathVariable("pageNum") int pageNum){
+    public String selectPage(Model model, PostSearchForm searchForm, @PathVariable("pageNum") int pageNum){
         searchForm.setStart(
                 (pageNum>0)?(pageNum-1)*10:0
         );
+        logger.debug("searchForm :"+searchForm);
         PageVO<List<BoardItemVO>> pageVO = getPageVO(searchForm);
         model.addAttribute("postList",pageVO);
 

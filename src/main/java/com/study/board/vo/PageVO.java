@@ -30,4 +30,7 @@ public class PageVO<T> {
     public void setViewPostCount(int viewPostCount) {
         this.viewPostCount = viewPostCount;
     }
+    public void setCurrentPage(int currentPage){
+        this.currentPage = currentPage;
+    }
 }
