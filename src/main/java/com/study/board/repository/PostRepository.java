@@ -10,5 +10,6 @@ import java.util.List;
 public interface PostRepository {
 
     public List<BoardItemVO> selectBoardViewList(PostSearchForm postSearchForm);
+    public int selectPostCount(PostSearchForm postSearchForm);
     public PostViewVO selectPostOne(int postId);
 }

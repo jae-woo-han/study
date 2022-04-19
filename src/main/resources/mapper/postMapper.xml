@@ -8,8 +8,7 @@
         po.post_id
         , ca.category_name
         , (select count(*) from file_info fi
-        where fi.post_id = po.post_id) as
-        file_count
+        where fi.post_id = po.post_id)    as file_count
         , po.title
         , po.post_content
         , po.writer
@@ -47,7 +46,6 @@
     <select id="selectPostOne" resultType="PostViewVO" parameterType="int">
         select
              po.post_id
-             , count(po.post_id)               as post_count
              , ca.category_name
              , (select count(*)
                 from file_info fi
@@ -62,5 +60,26 @@
              category_info ca
              on (po.category_id = ca.category_id)
         where po.post_id = #{postId}
+    </select>
+    <select id="selectPostCount" resultType="int" parameterType="PostSearchForm">
+        select
+            count(po.post_id) as post_count
+        from post_info po
+        <where>
+            <if test="fromDt != null">
+                po.write_dt <![CDATA[>=]]> #{fromDt}
+            </if>
+            <if test="toDt != null">
+                and po.write_dt <![CDATA[<=]]> #{toDt}
+            </if>
+            <if test="categoryId != null and categoryId >0">
+                and po.category_id = #{categoryId}
+            </if>
+            <if test="searchMessage != null">
+                or po.title like '%#{searchMessage}%'
+                or po.post_content like '%#{searchMessage}%'
+                or po.writer like '%#{searchMessage}%'
+            </if>
+        </where>
     </select>
 </mapper>

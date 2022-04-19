@@ -31,13 +31,28 @@ public class BoardController {
     }
     @RequestMapping("/board")
     public String moveBoardPage(Model model,PostSearchForm searchForm){
-        List<BoardItemVO> postList = postRepository.selectBoardViewList(searchForm);
-
-        PageVO<List<BoardItemVO>> pageVO = new PageVO<>();
-        pageVO.setData(postList);
-        pageVO.setTotalCount(postList.size());
-        model.addAttribute("postList",postList);
+        PageVO<List<BoardItemVO>> pageVO = getPageVO(searchForm);
+        model.addAttribute("postList",pageVO);
         return "board";
+    }
+    @RequestMapping("/board/{pageNum}")
+    public String selectPage(Model model,PostSearchForm searchForm,@PathVariable("pageNum") int pageNum){
+        searchForm.setStart(
+                (pageNum>0)?(pageNum-1)*10:0
+        );
+        PageVO<List<BoardItemVO>> pageVO = getPageVO(searchForm);
+        model.addAttribute("postList",pageVO);
+
+        return "board";
+    }
+
+    private PageVO<List<BoardItemVO>> getPageVO(PostSearchForm searchForm) {
+        List<BoardItemVO> postList = postRepository.selectBoardViewList(searchForm);
+        int totalCount = postRepository.selectPostCount(searchForm);
+
+        PageVO<List<BoardItemVO>> pageVO = new PageVO<>(totalCount);
+        pageVO.setData(postList);
+        return pageVO;
     }
 
     @RequestMapping("/post/{postId}")
