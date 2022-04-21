@@ -1,19 +1,17 @@
 package com.study.board.controller;
 
+import com.study.board.repository.CategoryRepository;
 import com.study.board.repository.PostRepository;
 import com.study.board.vo.BoardItemVO;
 import com.study.board.vo.PageVO;
 import com.study.board.vo.PostSearchForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 @Transactional
@@ -23,9 +21,11 @@ public class BoardController {
 
     //처음은 service 단 없이 진행
     private final PostRepository postRepository;
+    private final CategoryRepository categoryRepository;
 
-    public BoardController(PostRepository postRepository) {
+    public BoardController(PostRepository postRepository, CategoryRepository categoryRepository) {
         this.postRepository = postRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @RequestMapping("/home")
@@ -40,6 +40,7 @@ public class BoardController {
         PageVO<List<BoardItemVO>> pageVO = getPageVO(searchForm);
         if(pageNum>0) pageVO.setCurrentPage(pageNum);
         model.addAttribute("postList",pageVO);
+        model.addAttribute("categoryList",categoryRepository.selectCategoryAll());
         return "board";
     }
     @RequestMapping("/board/{pageNum}")
@@ -63,9 +64,9 @@ public class BoardController {
         return pageVO;
     }
 
-    @RequestMapping("/post/{postId}")
-    public String movePostViewPage(Model model,@PathVariable("postId") int postId){
-
-        return "postView";
-    }
+//    @RequestMapping("/post/{postId}")
+//    public String movePostViewPage(Model model,@PathVariable("postId") int postId){
+//
+//        return "viewPost";
+//    }
 }
