@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<th:block th:replace="/fragments/head :: headFragment"></th:block>
+<body>
+<header>게시판 - 보기</header>
+<main th:object="${postView}">
+    <div>
+        <div th:text="*{writer}">작성자</div>
+        <div th:text="*{writeDt}">등록일시</div>
+        <div th:text="*{updateDt}">수정일시</div>
+    </div>
+
+    <div>
+        <div th:text="*{title}">title</div>
+        <div th:text="*{viewCount}">조회수</div>
+    </div>
+    <div>
+        <pre th:text="*{postContent}">
+            내용
+        </pre>
+    </div>
+    <div>
+        첨부파일
+    </div>
+    <div>
+        댓글
+    </div>
+</main>
+<footer>
+    <button>목록</button>
+    <button>수정</button>
+    <button>삭제</button>
+</footer>
+</body>
+</html>

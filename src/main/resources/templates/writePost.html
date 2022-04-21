@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<th:block th:replace="/fragments/head :: headFragment"></th:block>
+<body>
+<header>게시판 등록</header>
+<main>
+    <form method="post">
+        <label>카테고리*</label>
+        <select name="categoryId">
+            <option value="카테고리 선택"></option>
+            <option th:each="category : ${categoryList}" th:value="${category.categoryId}" th:text="${category.categoryName}"></option>
+        </select>
+        <label>작성자*</label>
+        <input type="text" placeholder="3글자 이상, 5글자 미만">
+        <label>비밀번호*</label>
+        <input type="password" placeholder="비밀번호">
+        <input type="password" placeholder="비밀번호 확인">
+        <label>제목*</label>
+        <input type="text">
+        <label>내용*</label>
+        <textarea></textarea>
+        <label>파일첨부</label>
+        <div>나중에 구현</div>
+    </form>
+</main>
+<footer>
+    <button>취소</button>
+    <button>저장</button>
+</footer>
+</body>
+</html>
