@@ -1,6 +1,5 @@
 package com.study.board.vo;
 
-import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
