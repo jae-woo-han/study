@@ -52,6 +52,9 @@
 .flex-container__row-item--title {
     flex: 9
 }
+.flex-container__row-item--title:hover {
+    background: gainsboro;
+}
 
 .flex-container__row-item--writer {
     flex: 3
