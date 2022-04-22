@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -32,7 +33,7 @@ public class BoardController {
     public String initPage(){
         return "index";
     }
-    @RequestMapping("/board")
+    @GetMapping("/board")
     public String moveBoardPage(Model model,PostSearchForm searchForm){
         logger.debug("searchForm :"+searchForm);
         int pageNum = searchForm.getStart();
@@ -41,17 +42,6 @@ public class BoardController {
         if(pageNum>0) pageVO.setCurrentPage(pageNum);
         model.addAttribute("postList",pageVO);
         model.addAttribute("categoryList",categoryRepository.selectCategoryAll());
-        return "board";
-    }
-    @RequestMapping("/board/{pageNum}")
-    public String selectPage(Model model, PostSearchForm searchForm, @PathVariable("pageNum") int pageNum){
-        searchForm.setStart(
-                (pageNum>0)?(pageNum-1)*10:0
-        );
-        logger.debug("searchForm :"+searchForm);
-        PageVO<List<BoardItemVO>> pageVO = getPageVO(searchForm);
-        model.addAttribute("postList",pageVO);
-
         return "board";
     }
 
@@ -63,10 +53,4 @@ public class BoardController {
         pageVO.setData(postList);
         return pageVO;
     }
-
-//    @RequestMapping("/post/{postId}")
-//    public String movePostViewPage(Model model,@PathVariable("postId") int postId){
-//
-//        return "viewPost";
-//    }
 }

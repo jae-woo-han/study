@@ -81,4 +81,13 @@
             </if>
         </where>
     </select>
+    <insert id="insertPost" parameterType="PostCreateForm" >
+        insert into post_info
+            (category_id, title, post_content, writer, password)
+          values
+            (#{categoryId},#{title},#{postContent},#{writer},#{password})
+    </insert>
+    <select id="selectLastInsertKey" resultType="int">
+            select LAST_INSERT_ID()
+    </select>
 </mapper>

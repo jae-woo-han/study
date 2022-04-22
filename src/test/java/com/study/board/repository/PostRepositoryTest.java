@@ -1,6 +1,7 @@
 package com.study.board.repository;
 
 import com.study.board.vo.BoardItemVO;
+import com.study.board.vo.PostCreateForm;
 import com.study.board.vo.PostSearchForm;
 import com.study.board.vo.PostViewVO;
 import org.junit.jupiter.api.Test;
@@ -41,5 +42,18 @@ class PostRepositoryTest {
         PostSearchForm form = new PostSearchForm();
         int count = postRepository.selectPostCount(form);
         assertEquals(47,count);
+    }
+    @Test
+    void insertPost(){
+        PostCreateForm form= new PostCreateForm();
+        form.setCategoryId(1);
+        form.setTitle("등록 테스트");
+        form.setPostContent("asdfdf");
+        form.setWriter("등록자");
+        form.setPassword("1234ar");
+        postRepository.insertPost(form);
+        int result = postRepository.selectLastInsertKey();
+
+        assertEquals(60,result);
     }
 }
