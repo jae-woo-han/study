@@ -42,8 +42,8 @@
         <a class="flex-container__row-item--title" th:text="${post.title}" th:href="@{/post/{id}(id=${post.postId})}"></a>
         <div class="flex-container__row-item--writer" th:text="${post.writer}"></div>
         <div class="flex-container__row-item--count" th:text="${post.viewCount}"></div>
-        <div class="flex-container__row-item--date" th:text="${post.writeDt}"></div>
-        <div class="flex-container__row-item--date" th:text="${post.updateDt}"></div>
+        <div class="flex-container__row-item--date" th:text="${#temporals.format(post.writeDt,'yyyy-MM-dd HH:mm:ss')}"></div>
+        <div class="flex-container__row-item--date" th:text="${#temporals.format(post.updateDt,'yyyy-MM-dd HH:mm:ss')}"></div>
       </div>
     </div>
   </div>

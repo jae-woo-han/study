@@ -3,14 +3,14 @@
 <th:block th:replace="/fragments/head :: headFragment"></th:block>
 <body>
 <header>게시판 - 보기</header>
-<main th:object="${postView}">
-    <div>
+<main th:object="${postView}" class="flex-container flex-container--column">
+    <div class="flex-container">
         <div th:text="*{writer}">작성자</div>
         <div th:text="*{writeDt}">등록일시</div>
         <div th:text="*{updateDt}">수정일시</div>
     </div>
 
-    <div>
+    <div class="flex-container">
         <div th:text="*{title}">title</div>
         <div th:text="*{viewCount}">조회수</div>
     </div>
