@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class PostCreateForm {
+    private int postId;
     private int categoryId;
     private String title;
     private String postContent;

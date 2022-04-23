@@ -39,7 +39,7 @@
         </where>
         order by po.write_dt desc
         <if test="start != null">
-            limit ${start}, 10;
+            `limit` ${start}, 10;
         </if>
     </select>
     <select id="selectPostOne" resultType="PostViewVO" parameterType="int">
@@ -81,7 +81,7 @@
             </if>
         </where>
     </select>
-    <insert id="insertPost" parameterType="PostCreateForm" >
+    <insert id="insertPost" parameterType="PostCreateForm" useGeneratedKeys="true" keyProperty="postId" keyColumn="post_id">
         insert into post_info
             (category_id, title, post_content, writer, password)
           values

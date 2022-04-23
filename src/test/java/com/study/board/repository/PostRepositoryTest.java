@@ -52,8 +52,8 @@ class PostRepositoryTest {
         form.setWriter("등록자");
         form.setPassword("1234ar");
         postRepository.insertPost(form);
-        int result = postRepository.selectLastInsertKey();
+        int result =form.getPostId();
 
-        assertEquals(60,result);
+        assertEquals(72,result);
     }
 }

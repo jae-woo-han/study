@@ -43,8 +43,10 @@ public class PostController {
     }
     @PostMapping("/post")
     public RedirectView writePost(Model model,PostCreateForm postForm){
-        int insertedPostId = postService.getLastInsertKeyInPostInfo(postForm);
+        postRepository.insertPost(postForm);
+        int insertedPostId = postForm.getPostId();
         model.addAttribute("postId",insertedPostId);
-        return new RedirectView("/board");
+        String redirectPath = "/post/"+Integer.toString(insertedPostId);
+        return new RedirectView(redirectPath);
     }
 }
