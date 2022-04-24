@@ -4,90 +4,101 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.study.board.repository.PostRepository">
     <select id="selectBoardViewList" resultType="BoardItemVO" parameterType="PostSearchForm">
-        select
+        SELECT
         po.post_id
         , ca.category_name
-        , (select count(*) from file_info fi
-        where fi.post_id = po.post_id)    as file_count
+        , (SELECT count(*) FROM file_info fi
+        WHERE fi.post_id = po.post_id)    AS file_count
         , po.title
         , po.post_content
         , po.writer
         , po.write_dt
         , po.update_dt
-        from post_info po
-        inner join
+        FROM post_info po
+        INNER JOIN
         category_info ca
-        on (po.category_id = ca.category_id)
+        ON (po.category_id = ca.category_id)
         <where>
             <if test="postId != null and postId >0">
                 po.post_id = #{postId}
             </if>
             <if test="fromDt != null">
-                and po.write_dt <![CDATA[>=]]>
+                AND po.write_dt <![CDATA[>=]]>
                 #{fromDt}
-                and po.write_dt <![CDATA[<=]]>
+                AND po.write_dt <![CDATA[<=]]>
                 #{toDt}
             </if>
             <if test="categoryId != null and categoryId >0">
-                and po.category_id = #{categoryId}
+                AND po.category_id = #{categoryId}
             </if>
             <if test="searchMessage != null and searchMessage != ''">
-                and po.title like concat('%',#{searchMessage},'%')
-                or po.post_content like concat('%',#{searchMessage},'%')
-                or po.writer like concat('%',#{searchMessage},'%')
+                AND po.title LIKE concat('%',#{searchMessage},'%')
+                OR po.post_content LIKE concat('%',#{searchMessage},'%')
+                OR po.writer LIKE concat('%',#{searchMessage},'%')
             </if>
         </where>
-        order by po.write_dt desc
+        ORDER BY po.write_dt DESC
         <if test="start != null">
-            `limit` ${start}, 10;
+            LIMIT ${start}, 10;
         </if>
     </select>
     <select id="selectPostOne" resultType="PostViewVO" parameterType="int">
-        select
+        SELECT
              po.post_id
              , ca.category_name
-             , (select count(*)
-                from file_info fi
-                where fi.post_id = po.post_id) as file_count
+             , (SELECT count(*)
+                FROM file_info fi
+                WHERE fi.post_id = po.post_id) AS file_count
              , po.title
              , po.post_content
              , po.writer
              , po.write_dt
              , po.update_dt
-        from post_info po
-                 inner join
+        FROM post_info po
+                 INNER JOIN
              category_info ca
-             on (po.category_id = ca.category_id)
-        where po.post_id = #{postId}
+             ON (po.category_id = ca.category_id)
+        WHERE po.post_id = #{postId}
     </select>
     <select id="selectPostCount" resultType="int" parameterType="PostSearchForm">
-        select
-            count(po.post_id) as post_count
-        from post_info po
+        SELECT
+            count(po.post_id) AS post_count
+        FROM post_info po
         <where>
             <if test="fromDt != null">
                 po.write_dt <![CDATA[>=]]> #{fromDt}
             </if>
             <if test="toDt != null">
-                and po.write_dt <![CDATA[<=]]> #{toDt}
+                AND po.write_dt <![CDATA[<=]]> #{toDt}
             </if>
             <if test="categoryId != null and categoryId >0">
-                and po.category_id = #{categoryId}
+                AND po.category_id = #{categoryId}
             </if>
             <if test="searchMessage != null and searchMessage != ''">
-                and po.title like concat('%',#{searchMessage},'%')
-                or po.post_content like concat('%',#{searchMessage},'%')
-                or po.writer like concat('%',#{searchMessage},'%')
+                AND po.title LIKE concat('%',#{searchMessage},'%')
+                OR po.post_content LIKE concat('%',#{searchMessage},'%')
+                OR po.writer LIKE concat('%',#{searchMessage},'%')
             </if>
         </where>
     </select>
     <insert id="insertPost" parameterType="PostCreateForm" useGeneratedKeys="true" keyProperty="postId" keyColumn="post_id">
-        insert into post_info
+        INSERT INTO post_info
             (category_id, title, post_content, writer, password)
-          values
+          VALUES
             (#{categoryId},#{title},#{postContent},#{writer},#{password})
     </insert>
     <select id="selectLastInsertKey" resultType="int">
-            select LAST_INSERT_ID()
+            SELECT LAST_INSERT_ID()
     </select>
+    <delete id="deletePostOne" parameterType="int">
+        DELETE FROM post_info
+          WHERE post_id = #{postId}
+    </delete>
+    <update id="updatePostOne" parameterType="PostUpdateForm" >
+        UPDATE post_info SET
+            writer = #{writer}
+            , title = #{title}
+            , post_content = #{postContent}
+          WHERE post_id= #{postId}
+    </update>
 </mapper>

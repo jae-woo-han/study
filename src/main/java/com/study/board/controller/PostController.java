@@ -23,12 +23,10 @@ public class PostController {
 
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
-    private final PostService postService;
 
-    public PostController(PostRepository postRepository, CategoryRepository categoryRepository, PostService postService) {
+    public PostController(PostRepository postRepository, CategoryRepository categoryRepository) {
         this.postRepository = postRepository;
         this.categoryRepository = categoryRepository;
-        this.postService = postService;
     }
     @GetMapping("/post/{postId}")
     public String moveViewPostPage(Model model, @PathVariable("postId") int postId){

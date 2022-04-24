@@ -1,9 +1,6 @@
 package com.study.board.repository;
 
-import com.study.board.vo.BoardItemVO;
-import com.study.board.vo.PostCreateForm;
-import com.study.board.vo.PostSearchForm;
-import com.study.board.vo.PostViewVO;
+import com.study.board.vo.*;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +52,18 @@ class PostRepositoryTest {
         int result =form.getPostId();
 
         assertEquals(72,result);
+    }
+    @Test
+    void updatePostOne(){
+        PostUpdateForm form = new PostUpdateForm();
+        form.setPostId(2);
+        form.setWriter("수정자");
+        form.setTitle("수정테스트");
+        form.setPostContent("csccccccc");
+
+        postRepository.updatePostOne(form);
+        PostViewVO view = postRepository.selectPostOne(form.getPostId());
+
+        assertEquals(form.getWriter(),view.getWriter());
     }
 }

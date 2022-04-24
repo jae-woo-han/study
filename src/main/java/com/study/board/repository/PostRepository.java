@@ -1,9 +1,6 @@
 package com.study.board.repository;
 
-import com.study.board.vo.BoardItemVO;
-import com.study.board.vo.PostCreateForm;
-import com.study.board.vo.PostSearchForm;
-import com.study.board.vo.PostViewVO;
+import com.study.board.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -16,4 +13,5 @@ public interface PostRepository {
 
     int insertPost(PostCreateForm postCreateForm);
     int selectLastInsertKey();
+    int updatePostOne(PostUpdateForm postUpdateForm);
 }
