@@ -6,8 +6,8 @@
 <main th:object="${postView}" class="flex-container flex-container--column">
     <div class="flex-container">
         <div th:text="*{writer}">작성자</div>
-        <div th:text="*{writeDt}">등록일시</div>
-        <div th:text="*{updateDt}">수정일시</div>
+        <div th:text="${#temporals.format(postView.writeDt,'yyyy-MM-dd HH:mm:ss')}">등록일시</div>
+        <div th:text="${#temporals.format(postView.updateDt,'yyyy-MM-dd HH:mm:ss')}">수정일시</div>
     </div>
 
     <div class="flex-container">
@@ -28,8 +28,13 @@
 </main>
 <footer>
     <button>목록</button>
-    <button>수정</button>
-    <button>삭제</button>
+    <button th:attr="onclick=|moveConfirmPage('update','${postView.postId}')|">수정</button>
+    <button th:attr="onclick=|moveConfirmPage('delete','${postView.postId}')|">삭제</button>
 </footer>
+<script>
+    const moveConfirmPage = (path, param)=>{
+        location.href = `/passConfirm/${path}/${param}`;
+    }
+</script>
 </body>
 </html>

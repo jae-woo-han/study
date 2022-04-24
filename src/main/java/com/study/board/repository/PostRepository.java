@@ -14,4 +14,8 @@ public interface PostRepository {
     int insertPost(PostCreateForm postCreateForm);
     int selectLastInsertKey();
     int updatePostOne(PostUpdateForm postUpdateForm);
+
+    String selectPostPasswordOne(int postId);
+
+    int deletePostOne(int postId);
 }

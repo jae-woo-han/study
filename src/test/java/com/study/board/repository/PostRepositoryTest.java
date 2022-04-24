@@ -66,4 +66,17 @@ class PostRepositoryTest {
 
         assertEquals(form.getWriter(),view.getWriter());
     }
+    @Test
+    void selectPostPasswordOne(){
+        String pass = postRepository.selectPostPasswordOne(1);
+
+        assertEquals("1234",pass);
+    }
+
+    @Test
+    void deletePostOne(){
+        int postId = 73;
+        postRepository.deletePostOne(postId);
+        assertNull(postRepository.selectPostOne(postId));
+    }
 }

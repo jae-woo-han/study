@@ -58,7 +58,8 @@
                  INNER JOIN
              category_info ca
              ON (po.category_id = ca.category_id)
-        WHERE po.post_id = #{postId}
+        WHERE
+            po.post_id = #{postId}
     </select>
     <select id="selectPostCount" resultType="int" parameterType="PostSearchForm">
         SELECT
@@ -87,18 +88,24 @@
           VALUES
             (#{categoryId},#{title},#{postContent},#{writer},#{password})
     </insert>
-    <select id="selectLastInsertKey" resultType="int">
-            SELECT LAST_INSERT_ID()
+    <select id="selectPostPasswordOne" parameterType="int" resultType="String">
+        SELECT
+            password
+        FROM post_info
+          WHERE
+              post_id=#{postId}
     </select>
     <delete id="deletePostOne" parameterType="int">
         DELETE FROM post_info
-          WHERE post_id = #{postId}
+          WHERE
+              post_id = #{postId}
     </delete>
     <update id="updatePostOne" parameterType="PostUpdateForm" >
         UPDATE post_info SET
             writer = #{writer}
             , title = #{title}
             , post_content = #{postContent}
-          WHERE post_id= #{postId}
+          WHERE
+              post_id= #{postId}
     </update>
 </mapper>
