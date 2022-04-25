@@ -5,6 +5,7 @@ import com.study.board.repository.CategoryRepository;
 import com.study.board.repository.PostRepository;
 import com.study.board.service.PostService;
 import com.study.board.vo.PostCreateForm;
+import com.study.board.vo.PostUpdateForm;
 import com.study.board.vo.PostViewVO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -49,6 +50,35 @@ public class PostController {
         String redirectPath = "/post/"+Integer.toString(insertedPostId);
         return new RedirectView(redirectPath);
     }
+    @PostMapping("/post/{postId}/delete")
+    public RedirectView deletePost(Model model, @PathVariable("postId") int postId,String password){
+        String selectPassword = postRepository.selectPostPasswordOne(postId);
+
+        PostViewVO postView;
+        if(StringUtils.isNoneEmpty(password)){
+            logger.debug("********password Confirm********");
+            logger.debug(password+" == "+selectPassword);
+            if(StringUtils.equals(password,selectPassword)){
+                postRepository.deletePostOne(postId);
+                model.addAttribute("alertMessage","삭제가 완료되었습니다.");
+            }else {
+                throw new ValidateException("비밀번호 불일치");
+            }
+        }
+
+        return new RedirectView("/board");
+    }
+    @PostMapping("/post/{postId}/update")
+    public RedirectView updatePost(Model model, @PathVariable("postId") int postId, PostUpdateForm postUpdateForm){
+        //비밀번호확인
+        
+        //수정 작업
+        
+        //해당 게시글 페이지로 이동
+
+
+        return new RedirectView("");
+    }
 
     @GetMapping("/passConfirm/update/{postId}")
     public String movePostUpdateConfirmPage(Model model,@PathVariable("postId")int postId){
@@ -82,23 +112,5 @@ public class PostController {
         }
 
         return "updatePost";
-    }
-    @PostMapping("/post/{postId}/delete")
-    public RedirectView movePostDeletePage(Model model, @PathVariable("postId") int postId,String password){
-        String selectPassword = postRepository.selectPostPasswordOne(postId);
-
-        PostViewVO postView;
-        if(StringUtils.isNoneEmpty(password)){
-            logger.debug("********password Confirm********");
-            logger.debug(password+" == "+selectPassword);
-            if(StringUtils.equals(password,selectPassword)){
-                postRepository.deletePostOne(postId);
-                model.addAttribute("alertMessage","삭제가 완료되었습니다.");
-            }else {
-                throw new ValidateException("비밀번호 불일치");
-            }
-        }
-
-        return new RedirectView("/board");
     }
 }

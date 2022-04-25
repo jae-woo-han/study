@@ -4,7 +4,7 @@
 <body>
 <header>게시판 등록</header>
 <main>
-    <form action="/post" method="post" id="postUpdateForm">
+    <form th:action="@{/post/{id}/update(id=${postView.postId})}" method="post" id="postUpdateForm">
         <label>카테고리*</label>
         <div th:text="${postView.categoryName}">카테고리</div>
         <div th:text="${#temporals.format(postView.writeDt,'yyyy-MM-dd HH:mm:ss')}">등록일시</div>
