@@ -3,7 +3,6 @@ package com.study.board.controller;
 import com.study.board.exception.ValidateException;
 import com.study.board.repository.CategoryRepository;
 import com.study.board.repository.PostRepository;
-import com.study.board.service.PostService;
 import com.study.board.vo.PostCreateForm;
 import com.study.board.vo.PostUpdateForm;
 import com.study.board.vo.PostViewVO;
@@ -47,17 +46,16 @@ public class PostController {
         postRepository.insertPost(postForm);
         int insertedPostId = postForm.getPostId();
         model.addAttribute("postId",insertedPostId);
-        String redirectPath = "/post/"+Integer.toString(insertedPostId);
+        String redirectPath = "/post/"+ insertedPostId;
         return new RedirectView(redirectPath);
     }
-    @PostMapping("/post/{postId}/delete")
+    @PostMapping("/passConfirm/{postId}/delete")
     public RedirectView deletePost(Model model, @PathVariable("postId") int postId,String password){
         String selectPassword = postRepository.selectPostPasswordOne(postId);
 
-        PostViewVO postView;
         if(StringUtils.isNoneEmpty(password)){
             logger.debug("********password Confirm********");
-            logger.debug(password+" == "+selectPassword);
+            logger.debug("{} == {}",password,selectPassword);
             if(StringUtils.equals(password,selectPassword)){
                 postRepository.deletePostOne(postId);
                 model.addAttribute("alertMessage","삭제가 완료되었습니다.");
@@ -68,33 +66,7 @@ public class PostController {
 
         return new RedirectView("/board");
     }
-    @PostMapping("/post/{postId}/update")
-    public RedirectView updatePost(Model model, @PathVariable("postId") int postId, PostUpdateForm postUpdateForm){
-        //비밀번호확인
-        
-        //수정 작업
-        
-        //해당 게시글 페이지로 이동
-
-
-        return new RedirectView("");
-    }
-
-    @GetMapping("/passConfirm/update/{postId}")
-    public String movePostUpdateConfirmPage(Model model,@PathVariable("postId")int postId){
-        model.addAttribute("postId", postId);
-        model.addAttribute("method","update");
-
-        return "confirmPost";
-    }
-    @GetMapping("/passConfirm/delete/{postId}")
-    public String movePostDeleteConfirmPage(Model model,@PathVariable("postId")int postId){
-        model.addAttribute("postId", postId);
-        model.addAttribute("method","delete");
-
-        return "confirmPost";
-    }
-    @PostMapping("/post/{postId}/update")
+    @PostMapping("/passConfirm/{postId}/update")
     public String movePostUpdatePage(Model model, @PathVariable("postId") int postId,String password){
         String selectPassword = postRepository.selectPostPasswordOne(postId);
 
@@ -112,5 +84,39 @@ public class PostController {
         }
 
         return "updatePost";
+    }
+    @PostMapping("/post/{postId}/update")
+    public RedirectView updatePost(Model model, @PathVariable("postId") int postId, PostUpdateForm postUpdateForm){
+        //비밀번호확인
+        String selectPassword = postRepository.selectPostPasswordOne(postId);
+        String password = postUpdateForm.getPassword();
+        //수정 작업
+        if(StringUtils.isNoneEmpty(password)){
+            logger.debug("********password Confirm********");
+            logger.debug("{} == {}",password,selectPassword);
+            if(StringUtils.equals(password,selectPassword)){
+                postRepository.updatePostOne(postUpdateForm);
+                model.addAttribute("alertMessage","수정이 완료되었습니다.");
+            }else {
+                throw new ValidateException("비밀번호 불일치");
+            }
+        }
+        //해당 게시글 페이지로 이동
+        return new RedirectView("/post/"+postId);
+    }
+
+    @GetMapping("/passConfirm/update/{postId}")
+    public String movePostUpdateConfirmPage(Model model,@PathVariable("postId")int postId){
+        model.addAttribute("postId", postId);
+        model.addAttribute("method","update");
+
+        return "confirmPost";
+    }
+    @GetMapping("/passConfirm/delete/{postId}")
+    public String movePostDeleteConfirmPage(Model model,@PathVariable("postId")int postId){
+        model.addAttribute("postId", postId);
+        model.addAttribute("method","delete");
+
+        return "confirmPost";
     }
 }
