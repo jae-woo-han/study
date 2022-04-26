@@ -7,5 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface CategoryRepository {
-    public List<CategoryInfoVO> selectCategoryAll();
+    List<CategoryInfoVO> selectCategoryAll();
 }
