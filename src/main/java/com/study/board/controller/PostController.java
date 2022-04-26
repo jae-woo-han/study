@@ -3,19 +3,29 @@ package com.study.board.controller;
 import com.study.board.exception.ValidateException;
 import com.study.board.repository.CategoryRepository;
 import com.study.board.repository.PostRepository;
+import com.study.board.vo.FileVO;
 import com.study.board.vo.PostCreateForm;
 import com.study.board.vo.PostUpdateForm;
 import com.study.board.vo.PostViewVO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 @Transactional
 @Controller
@@ -25,7 +35,8 @@ public class PostController {
 
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
-
+    @Value("${spring.servlet.multipart.location}")
+    private String multipartLocation;
     public PostController(PostRepository postRepository, CategoryRepository categoryRepository) {
         this.postRepository = postRepository;
         this.categoryRepository = categoryRepository;
@@ -42,7 +53,31 @@ public class PostController {
         return "writePost";
     }
     @PostMapping("/post")
-    public RedirectView writePost(Model model,PostCreateForm postForm){
+    public RedirectView writePost(Model model
+            , PostCreateForm postForm
+            , MultipartFile[] files)
+            throws IOException {
+
+        File path = new File(multipartLocation);
+        if(!path.exists()){
+            path.mkdirs();
+        }
+        for (MultipartFile multipartFile:files) {
+            String originName = multipartFile.getOriginalFilename();
+            String fileName = originName.substring(0,originName.lastIndexOf(".")-1);
+            String fileType = originName.substring(originName.lastIndexOf(".")+1);
+            String encodeFileName = UUID.randomUUID().toString();
+
+            FileVO fileVO = new FileVO();
+            fileVO.setPostId(postForm.getPostId());
+            fileVO.setFileName(fileName);
+            fileVO.setFileType(fileType);
+            fileVO.setEncodeFileName(encodeFileName);
+            fileVO.setDirectoryPath(path.getPath());
+
+            multipartFile.transferTo(new File(path,encodeFileName));
+        }
+
         postRepository.insertPost(postForm);
         int insertedPostId = postForm.getPostId();
         model.addAttribute("postId",insertedPostId);

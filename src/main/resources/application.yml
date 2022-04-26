@@ -6,6 +6,9 @@ spring:
     url: jdbc:mariadb://localhost:3306/board_study?characterEncoding=UTF-8
     username: root
     password: akfldk1elql
+  servlet:
+    multipart:
+      location: C:\dev\Tool\uploadFiles
 mybatis:
   type-aliases-package: com.study.board.vo
   configuration:

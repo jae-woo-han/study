@@ -4,7 +4,7 @@
 <body>
 <header>게시판 등록</header>
 <main>
-    <form action="/post" method="post" id="postForm">
+    <form action="/post" method="post" id="postForm" enctype="multipart/form-data">
         <label>카테고리*</label>
         <select name="categoryId">
             <option value="카테고리 선택"></option>
@@ -20,7 +20,7 @@
         <label>내용*</label>
         <textarea name="postContent"></textarea>
         <label>파일첨부</label>
-        <div>나중에 구현</div>
+        <div><input type="file" name="uploadFile" id="uploadFile" multiple></div>
     </form>
 </main>
 <footer>
