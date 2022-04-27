@@ -64,10 +64,10 @@ public class FileController {
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
 
-        model.addAttribute("files", storageService.loadAll().map(
-                        path -> MvcUriComponentsBuilder.fromMethodName(FileController.class,
-                                "serveFile", path.getFileName().toString()).build().toUri().toString())
-                .collect(Collectors.toList()));
+//        model.addAttribute("files", storageService.loadAll().map(
+//                        path -> MvcUriComponentsBuilder.fromMethodName(FileController.class,
+//                                "serveFile", path.getFileName().toString()).build().toUri().toString())
+//                .collect(Collectors.toList()));
 
         return "uploadForm";
     }

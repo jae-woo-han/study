@@ -8,7 +8,9 @@ spring:
     password: akfldk1elql
   servlet:
     multipart:
-      location: C:\dev\Tool\uploadFiles
+      location: C:\\dev\\Tool\\uploadFiles
+      max-file-size: 30MB
+      max-request-size: 30MB
 mybatis:
   type-aliases-package: com.study.board.vo
   configuration:
