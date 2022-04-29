@@ -20,7 +20,11 @@
         </pre>
     </div>
     <div>
-        첨부파일
+        <ul>
+            <li th:each="file : ${fileList}">
+                <a th:href="@{/file/{fileSeq}(fileSeq=${file.fileSeq})}" th:text="${file.fileName+'.'+file.fileType}" />
+            </li>
+        </ul>
     </div>
     <div>
         댓글

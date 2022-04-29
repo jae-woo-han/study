@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.io.IOException;
 import java.util.stream.Collectors;
@@ -64,10 +65,10 @@ public class FileController {
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
 
-//        model.addAttribute("files", storageService.loadAll().map(
-//                        path -> MvcUriComponentsBuilder.fromMethodName(FileController.class,
-//                                "serveFile", path.getFileName().toString()).build().toUri().toString())
-//                .collect(Collectors.toList()));
+        model.addAttribute("files", storageService.loadAll().map(
+                        path -> MvcUriComponentsBuilder.fromMethodName(FileController.class,
+                                "serveFile", path.getFileName().toString()).build().toUri().toString())
+                .collect(Collectors.toList()));
 
         return "uploadForm";
     }
@@ -99,7 +100,7 @@ public class FileController {
                                    RedirectAttributes redirectAttributes) {
 
         try {
-            storageService.store(file);
+            storageService.store(file, UUID.randomUUID().toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

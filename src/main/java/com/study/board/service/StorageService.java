@@ -26,7 +26,7 @@ public interface StorageService {
      * MultipartFile을 저장
      * @param file
      */
-    void store(MultipartFile file) throws IOException;
+    void store(MultipartFile file, String fileName) throws IOException;
 
     /**
      * 저장된 파일 경로 전부 load
