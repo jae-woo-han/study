@@ -42,6 +42,7 @@ public class BoardController {
         if(pageNum>0) pageVO.setCurrentPage(pageNum);
         model.addAttribute("postList",pageVO);
         model.addAttribute("categoryList",categoryRepository.selectCategoryAll());
+        model.addAttribute("search",searchForm);
         return "board";
     }
 
