@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.board.repository.PostRepository">
+    <select id="selectBoardViewList" resultType="BoardItemVO" parameterType="PostSearchForm">
+        SELECT
+        po.post_id
+        , ca.category_name
+        , (SELECT count(*) FROM file_info fi
+        WHERE fi.post_id = po.post_id)    AS file_count
+        , po.title
+        , po.post_content
+        , po.writer
+        , po.write_dt
+        , po.update_dt
+        FROM post_info po
+        INNER JOIN
+        category_info ca
+        ON (po.category_id = ca.category_id)
+        <where>
+            <if test="postId != null and postId >0">
+                po.post_id = #{postId}
+            </if>
+            <if test="fromDt != null">
+                AND po.write_dt <![CDATA[>=]]>
+                #{fromDt}
+                AND po.write_dt <![CDATA[<=]]>
+                #{toDt}
+            </if>
+            <if test="categoryId != null and categoryId >0">
+                AND po.category_id = #{categoryId}
+            </if>
+            <if test="searchMessage != null and searchMessage != ''">
+                AND po.title LIKE concat('%',#{searchMessage},'%')
+                OR po.post_content LIKE concat('%',#{searchMessage},'%')
+                OR po.writer LIKE concat('%',#{searchMessage},'%')
+            </if>
+        </where>
+        ORDER BY po.write_dt DESC
+        <if test="start != null">
+            LIMIT ${start}, 10;
+        </if>
+    </select>
+    <select id="selectPostOne" resultType="PostViewVO" parameterType="int">
+        SELECT
+             po.post_id
+             , ca.category_name
+             , (SELECT count(*)
+                FROM file_info fi
+                WHERE fi.post_id = po.post_id) AS file_count
+             , po.title
+             , po.post_content
+             , po.writer
+             , po.write_dt
+             , po.update_dt
+        FROM post_info po
+                 INNER JOIN
+             category_info ca
+             ON (po.category_id = ca.category_id)
+        WHERE
+            po.post_id = #{postId}
+    </select>
+    <select id="selectPostCount" resultType="int" parameterType="PostSearchForm">
+        SELECT
+            count(po.post_id) AS post_count
+        FROM post_info po
+        <where>
+            <if test="fromDt != null">
+                po.write_dt <![CDATA[>=]]> #{fromDt}
+            </if>
+            <if test="toDt != null">
+                AND po.write_dt <![CDATA[<=]]> #{toDt}
+            </if>
+            <if test="categoryId != null and categoryId >0">
+                AND po.category_id = #{categoryId}
+            </if>
+            <if test="searchMessage != null and searchMessage != ''">
+                AND po.title LIKE concat('%',#{searchMessage},'%')
+                OR po.post_content LIKE concat('%',#{searchMessage},'%')
+                OR po.writer LIKE concat('%',#{searchMessage},'%')
+            </if>
+        </where>
+    </select>
+    <insert id="insertPost" parameterType="PostCreateForm" useGeneratedKeys="true" keyProperty="postId" keyColumn="post_id">
+        INSERT INTO post_info
+            (category_id, title, post_content, writer, password)
+          VALUES
+            (#{categoryId},#{title},#{postContent},#{writer},#{password})
+    </insert>
+    <select id="selectPostPasswordOne" parameterType="int" resultType="String">
+        SELECT
+            password
+        FROM post_info
+          WHERE
+              post_id=#{postId}
+    </select>
+    <delete id="deletePostOne" parameterType="int">
+        DELETE FROM post_info
+          WHERE
+              post_id = #{postId}
+    </delete>
+    <update id="updatePostOne" parameterType="PostUpdateForm" >
+        UPDATE post_info SET
+            writer = #{writer}
+            , title = #{title}
+            , post_content = #{postContent}
+          WHERE
+              post_id= #{postId}
+    </update>
+</mapper>

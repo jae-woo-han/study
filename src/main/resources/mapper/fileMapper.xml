@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.board.repository.FileRepository">
+    <select id="selectFilesByPostId" parameterType="int" resultType="FileVO">
+        select
+            file_seq
+             , post_id
+             , file_name
+             , file_type
+             , encode_file_name
+             , directory_path
+        from file_info
+          where
+              post_id = #{postId}
+    </select>
+    <select id="selectFileByFileSeq" parameterType="int" resultType="FileVO">
+        select
+            file_seq
+             , post_id
+             , file_name
+             , file_type
+             , encode_file_name
+             , directory_path
+        from file_info
+        where
+            file_seq = #{fileSeq}
+    </select>
+    <insert id="insertFileInfo" parameterType="FileVO" useGeneratedKeys="true" keyProperty="fileSeq">
+        insert into file_info
+            (post_id, file_name, file_type, encode_file_name, directory_path)
+          VALUES
+            (#{postId},#{fileName},#{fileType},#{encodeFileName},#{directoryPath})
+    </insert>
+</mapper>

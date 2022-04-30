@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:replace="/fragments/head :: headFragment"></th:block>
+<body>
+<header>게시판 등록</header>
+<main>
+    <form th:action="@{/post/{id}/update(id=${postView.postId})}" method="post" id="postUpdateForm">
+        <label>카테고리*</label>
+        <div th:text="${postView.categoryName}">카테고리</div>
+        <div th:text="${#temporals.format(postView.writeDt,'yyyy-MM-dd HH:mm:ss')}">등록일시</div>
+        <div th:text="${#temporals.format(postView.updateDt,'yyyy-MM-dd HH:mm:ss')}">수정일시</div>
+        <div th:text="${postView.viewCount}">조회수</div>
+        <label>작성자*</label>
+        <input type="text" name="writer" th:value="${postView.writer}">
+        <label>비밀번호*</label>
+        <input type="password" name="password">
+        <label>제목*</label>
+        <input type="text" name="title" th:value="${postView.title}">
+        <label>내용*</label>
+        <textarea name="postContent" th:text="${postView.postContent}"></textarea>
+        <label>파일첨부</label>
+        <div>나중에 구현</div>
+    </form>
+</main>
+<footer>
+    <button>취소</button>
+    <button onclick="submitForm()">저장</button>
+</footer>
+<script>
+    const postForm = document.querySelector("#postUpdateForm");
+    const submitForm =()=>postForm.submit();
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<th:block th:replace="/fragments/head :: headFragment"></th:block>
+<body>
+<header>게시판 등록</header>
+<main>
+    <form action="/post" method="post" id="postForm" enctype="multipart/form-data">
+        <label>카테고리*</label>
+        <select name="categoryId">
+            <option value="카테고리 선택"></option>
+            <option th:each="category : ${categoryList}" th:value="${category.categoryId}" th:text="${category.categoryName}"></option>
+        </select>
+        <label>작성자*</label>
+        <input type="text" name="writer" placeholder="3글자 이상, 5글자 미만">
+        <label>비밀번호*</label>
+        <input type="password" name="password" placeholder="비밀번호">
+        <input type="password" name="passwordConfirm" placeholder="비밀번호 확인">
+        <label>제목*</label>
+        <input type="text" name="title">
+        <label>내용*</label>
+        <textarea name="postContent"></textarea>
+        <label>파일첨부</label>
+        <div><input type="file" name="files" id="uploadFile" multiple="true"></div>
+    </form>
+</main>
+<footer>
+    <button>취소</button>
+    <button onclick="submitForm()">저장</button>
+</footer>
+<script>
+    const postForm = document.querySelector("#postForm");
+    const submitForm =()=>postForm.submit();
+</script>
+</body>
+</html>
