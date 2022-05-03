@@ -1,6 +1,5 @@
 package com.study.board.vo;
 
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
