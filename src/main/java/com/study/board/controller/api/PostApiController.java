@@ -31,7 +31,7 @@ public class PostApiController {
         return new ResponseEntity<>(postRepository.selectBoardViewList(postSearchForm),null, HttpStatus.OK);
     }
     @GetMapping("/page")
-    public ResponseEntity<PageApiVO> getPaging(PostSearchForm postSearchForm){
+    public ResponseEntity<PageApiVO> getPaging(@RequestParam(value = "postSearchForm",required = false) PostSearchForm postSearchForm){
         PageApiVO pageApiVO = new PageApiVO(postRepository.selectPostCount(postSearchForm));
         return new ResponseEntity<>(pageApiVO, null, HttpStatus.OK);
     }
