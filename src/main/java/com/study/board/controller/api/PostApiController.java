@@ -1,10 +1,7 @@
 package com.study.board.controller.api;
 
 import com.study.board.repository.PostRepository;
-import com.study.board.vo.BoardItemVO;
-import com.study.board.vo.PageApiVO;
-import com.study.board.vo.PostSearchForm;
-import com.study.board.vo.PostViewVO;
+import com.study.board.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +36,16 @@ public class PostApiController {
     public ResponseEntity<PostViewVO> getPostViewByPostId(@PathVariable("postId") int postId){
         PostViewVO postViewVO = postRepository.selectPostOne(postId);
         return new ResponseEntity<>(postViewVO, null, HttpStatus.OK);
+    }
+    @PutMapping("/post/{postId}")
+    public ResponseEntity<PostViewVO> updatePostViewByPostId(@PathVariable("postId") int postId){
+        PostUpdateForm form = new PostUpdateForm();
+        form.setPostId(postId);
+        form.setTitle("수정제목");
+        form.setWriter("admin");
+        form.setPostContent("sellsifndlisnne");
+        postRepository.updatePostOne(form);
+        return new ResponseEntity<>(postRepository.selectPostOne(form.getPostId()), null, HttpStatus.OK);
     }
 
 }
