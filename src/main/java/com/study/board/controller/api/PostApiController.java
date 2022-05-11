@@ -37,15 +37,17 @@ public class PostApiController {
         PostViewVO postViewVO = postRepository.selectPostOne(postId);
         return new ResponseEntity<>(postViewVO, null, HttpStatus.OK);
     }
-    @PutMapping("/post/{postId}")
-    public ResponseEntity<PostViewVO> updatePostViewByPostId(@PathVariable("postId") int postId){
-        PostUpdateForm form = new PostUpdateForm();
-        form.setPostId(postId);
-        form.setTitle("수정제목");
-        form.setWriter("admin");
-        form.setPostContent("sellsifndlisnne");
-        postRepository.updatePostOne(form);
-        return new ResponseEntity<>(postRepository.selectPostOne(form.getPostId()), null, HttpStatus.OK);
+    @PostMapping("/post")
+    public ResponseEntity<PostViewVO> writePostViewByPostId(@RequestBody PostCreateForm postCreateForm){
+        log.debug("post create form : {}",postCreateForm.toString());
+        postRepository.insertPost(postCreateForm);
+        return new ResponseEntity<>(postRepository.selectPostOne(postCreateForm.getPostId()), null, HttpStatus.OK);
+    }
+    @PutMapping("/post")
+    public ResponseEntity<PostViewVO> updatePostViewByPostId(@RequestBody PostUpdateForm postUpdateForm){
+        log.debug("post update form : {}",postUpdateForm.toString());
+        postRepository.updatePostOne(postUpdateForm);
+        return new ResponseEntity<>(postRepository.selectPostOne(postUpdateForm.getPostId()), null, HttpStatus.OK);
     }
 
 }
