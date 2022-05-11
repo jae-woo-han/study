@@ -1,5 +1,8 @@
 server:
   port: 30000
+  tomcat:
+    uri-encoding: UTF-8
+
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
@@ -19,3 +22,5 @@ mybatis:
 logging:
   level:
     root: debug
+  charset:
+    console: UTF-8
