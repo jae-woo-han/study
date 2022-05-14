@@ -57,22 +57,27 @@ public class PostApiController {
     }
 
     @DeleteMapping("/post/{postId}")
-    public ResponseEntity<Boolean> deletePostByPostId(@PathVariable("postId") int postId) {
+    public ResponseEntity<ResponseVO> deletePostByPostId(@PathVariable("postId") int postId) {
         int result = postRepository.deletePostOne(postId);
-        return new ResponseEntity<>(result==1, null, HttpStatus.OK);
+        ResponseVO<Boolean> responseData = new ResponseVO<>("삭제 되었습니다.",true);
+        return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
     @PostMapping("/check/password/{postId}")
-    public ResponseEntity<Boolean> checkPassword(
+    public ResponseEntity<ResponseVO> checkPassword(
             @PathVariable("postId") int postId
             , @RequestBody Map<String,String> passwordData) {
         log.debug("비밀번호 확인 : {}",passwordData);
         String passwordConfirm = passwordData.get("passwordConfirm");
         String password = postRepository.selectPostPasswordOne(postId);
+
+        ResponseVO<Boolean> responseData;
         if (StringUtils.equals(password, passwordConfirm)) {
-            return new ResponseEntity<>(true, null, HttpStatus.OK);
+            responseData = new ResponseVO<>("비밀번호 확인",true);
+            return new ResponseEntity<>(responseData, null, HttpStatus.OK);
         }
-        return new ResponseEntity<>(false, null, HttpStatus.OK);
+        responseData = new ResponseVO<>("비밀번호 불일치",false);
+        return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
 }
