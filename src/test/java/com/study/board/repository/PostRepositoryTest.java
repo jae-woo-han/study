@@ -43,7 +43,7 @@ class PostRepositoryTest {
     @Test
     void insertPost(){
         PostCreateForm form= new PostCreateForm();
-        form.setCategoryId(1);
+        form.setCategoryId(0);
         form.setTitle("등록 테스트");
         form.setPostContent("asdfdf");
         form.setWriter("등록자");
@@ -51,7 +51,7 @@ class PostRepositoryTest {
         postRepository.insertPost(form);
         int result =form.getPostId();
 
-        assertEquals(72,result);
+        assertEquals(31,result);
     }
     @Test
     void updatePostOne(){
