@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class PostApiController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<PostViewVO> writePostViewByPostId(@RequestBody PostCreateForm postCreateForm) {
+    public ResponseEntity<PostViewVO> writePostViewByPostId(@RequestBody @Validated PostCreateForm postCreateForm) {
         log.debug("post create form : {}", postCreateForm.toString());
         postRepository.insertPost(postCreateForm);
         return new ResponseEntity<>(postRepository.selectPostOne(postCreateForm.getPostId()), null, HttpStatus.OK);
