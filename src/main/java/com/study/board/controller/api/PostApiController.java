@@ -26,40 +26,44 @@ public class PostApiController {
     }
 
     @GetMapping("/page/{pageNum}")
-    public ResponseEntity<List<BoardItemVO>> getPostListWithPage(@PathVariable("pageNum") int pageNum, PostSearchForm postSearchForm) {
+    public ResponseEntity<ResponseVO> getPostListWithPage(@PathVariable("pageNum") int pageNum, PostSearchForm postSearchForm) {
         postSearchForm.setStart((pageNum > 0) ? (pageNum - 1) * 10 : 0);
-        return new ResponseEntity<>(postRepository.selectBoardViewList(postSearchForm), null, HttpStatus.OK);
+        ResponseVO<List<BoardItemVO>> responseData = new ResponseVO<>("페이지 리스트",postRepository.selectBoardViewList(postSearchForm));
+        return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
     @GetMapping("/page")
-    public ResponseEntity<PageApiVO> getPaging(@RequestParam(value = "postSearchForm", required = false) PostSearchForm postSearchForm) {
+    public ResponseEntity<ResponseVO> getPaging(@RequestParam(value = "postSearchForm", required = false) PostSearchForm postSearchForm) {
         PageApiVO pageApiVO = new PageApiVO(postRepository.selectPostCount(postSearchForm));
-        return new ResponseEntity<>(pageApiVO, null, HttpStatus.OK);
+        ResponseVO<PageApiVO> responseData = new ResponseVO<>("페이징",pageApiVO);
+        return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<PostViewVO> getPostViewByPostId(@PathVariable("postId") int postId) {
-        PostViewVO postViewVO = postRepository.selectPostOne(postId);
-        return new ResponseEntity<>(postViewVO, null, HttpStatus.OK);
+    public ResponseEntity<ResponseVO> getPostViewByPostId(@PathVariable("postId") int postId) {
+        ResponseVO<PostViewVO> responseData = new ResponseVO<>("게시글 조회",postRepository.selectPostOne(postId));
+        return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
     @PostMapping("/post")
-    public ResponseEntity<PostViewVO> writePostViewByPostId(@RequestBody @Validated PostCreateForm postCreateForm) {
+    public ResponseEntity<ResponseVO> writePostViewByPostId(@RequestBody @Validated PostCreateForm postCreateForm) {
         log.debug("post create form : {}", postCreateForm.toString());
         postRepository.insertPost(postCreateForm);
-        return new ResponseEntity<>(postRepository.selectPostOne(postCreateForm.getPostId()), null, HttpStatus.OK);
+        ResponseVO<PostViewVO> responseData = new ResponseVO<>("등록 되었습니다",postRepository.selectPostOne(postCreateForm.getPostId()));
+        return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
     @PutMapping("/post")
-    public ResponseEntity<PostViewVO> updatePostViewByPostId(@RequestBody PostUpdateForm postUpdateForm) {
+    public ResponseEntity<ResponseVO> updatePostViewByPostId(@RequestBody PostUpdateForm postUpdateForm) {
         log.debug("post update form : {}", postUpdateForm.toString());
         postRepository.updatePostOne(postUpdateForm);
-        return new ResponseEntity<>(postRepository.selectPostOne(postUpdateForm.getPostId()), null, HttpStatus.OK);
+        ResponseVO<Integer> responseData = new ResponseVO<>("수정 되었습니다",postUpdateForm.getPostId());
+        return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
     @DeleteMapping("/post/{postId}")
     public ResponseEntity<ResponseVO> deletePostByPostId(@PathVariable("postId") int postId) {
-        int result = postRepository.deletePostOne(postId);
+        postRepository.deletePostOne(postId);
         ResponseVO<Boolean> responseData = new ResponseVO<>("삭제 되었습니다.",true);
         return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }

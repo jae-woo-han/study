@@ -9,7 +9,6 @@ import javax.validation.constraints.Size;
 
 @Data
 public class PostCreateForm {
-    @Min(1)
     private int postId;
     @Min(1)
     private int categoryId;
