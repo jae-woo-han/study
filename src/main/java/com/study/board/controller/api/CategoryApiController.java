@@ -2,6 +2,7 @@ package com.study.board.controller.api;
 
 import com.study.board.repository.CategoryRepository;
 import com.study.board.vo.CategoryInfoVO;
+import com.study.board.vo.ResponseVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,8 @@ public class CategoryApiController {
     }
 
     @GetMapping("/category")
-    public ResponseEntity<List<CategoryInfoVO>> getCategoryList(){
-        return new ResponseEntity<>(categoryRepository.selectCategoryAll(),null, HttpStatus.OK);
+    public ResponseEntity<ResponseVO<List<CategoryInfoVO>>> getCategoryList(){
+        ResponseVO<List<CategoryInfoVO>> responseData = new ResponseVO<>("성공",categoryRepository.selectCategoryAll());
+        return new ResponseEntity<>(responseData,null, HttpStatus.OK);
     }
 }

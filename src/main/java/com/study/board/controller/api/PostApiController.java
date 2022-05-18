@@ -28,20 +28,20 @@ public class PostApiController {
     @GetMapping("/page/{pageNum}")
     public ResponseEntity<ResponseVO<List<BoardItemVO>> > getPostListWithPage(@PathVariable("pageNum") int pageNum, PostSearchForm postSearchForm) {
         postSearchForm.setStart((pageNum > 0) ? (pageNum - 1) * 10 : 0);
-        ResponseVO<List<BoardItemVO>> responseData = new ResponseVO<>("페이지 리스트",postRepository.selectBoardViewList(postSearchForm));
+        ResponseVO<List<BoardItemVO>> responseData = new ResponseVO<>("성공",postRepository.selectBoardViewList(postSearchForm));
         return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
     @GetMapping("/page")
     public ResponseEntity<ResponseVO<PageApiVO>> getPaging(@RequestParam(value = "postSearchForm", required = false) PostSearchForm postSearchForm) {
         PageApiVO pageApiVO = new PageApiVO(postRepository.selectPostCount(postSearchForm));
-        ResponseVO<PageApiVO> responseData = new ResponseVO<>("페이징",pageApiVO);
+        ResponseVO<PageApiVO> responseData = new ResponseVO<>("성공",pageApiVO);
         return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
     @GetMapping("/post/{postId}")
     public ResponseEntity<ResponseVO<PostViewVO>> getPostViewByPostId(@PathVariable("postId") int postId) {
-        ResponseVO<PostViewVO> responseData = new ResponseVO<>("게시글 조회",postRepository.selectPostOne(postId));
+        ResponseVO<PostViewVO> responseData = new ResponseVO<>("성공",postRepository.selectPostOne(postId));
         return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
@@ -49,7 +49,7 @@ public class PostApiController {
     public ResponseEntity<ResponseVO<PostViewVO>> writePostViewByPostId(@RequestBody @Validated PostCreateForm postCreateForm) {
         log.debug("post create form : {}", postCreateForm.toString());
         postRepository.insertPost(postCreateForm);
-        ResponseVO<PostViewVO> responseData = new ResponseVO<>("등록 되었습니다",postRepository.selectPostOne(postCreateForm.getPostId()));
+        ResponseVO<PostViewVO> responseData = new ResponseVO<>("성공",postRepository.selectPostOne(postCreateForm.getPostId()));
         return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
@@ -57,14 +57,14 @@ public class PostApiController {
     public ResponseEntity<ResponseVO<Integer>> updatePostViewByPostId(@RequestBody PostUpdateForm postUpdateForm) {
         log.debug("post update form : {}", postUpdateForm.toString());
         postRepository.updatePostOne(postUpdateForm);
-        ResponseVO<Integer> responseData = new ResponseVO<>("수정 되었습니다",postUpdateForm.getPostId());
+        ResponseVO<Integer> responseData = new ResponseVO<>("성공",postUpdateForm.getPostId());
         return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
     @DeleteMapping("/post/{postId}")
     public ResponseEntity<ResponseVO<Boolean>> deletePostByPostId(@PathVariable("postId") int postId) {
         postRepository.deletePostOne(postId);
-        ResponseVO<Boolean> responseData = new ResponseVO<>("삭제 되었습니다.",true);
+        ResponseVO<Boolean> responseData = new ResponseVO<>("성공",true);
         return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
@@ -78,7 +78,7 @@ public class PostApiController {
 
         ResponseVO<Boolean> responseData;
         if (StringUtils.equals(password, passwordConfirm)) {
-            responseData = new ResponseVO<>("비밀번호 확인",true);
+            responseData = new ResponseVO<>("성공",true);
             return new ResponseEntity<>(responseData, null, HttpStatus.OK);
         }
         responseData = new ResponseVO<>("비밀번호 불일치",false);
@@ -91,7 +91,7 @@ public class PostApiController {
     ){
         PostViewVO postViewVO = postRepository.selectPostOne(postId);
         postRepository.updateViewCount(postId,postViewVO.getViewCount()+1);
-        ResponseVO<PostViewVO> responseData = new ResponseVO<>("게시글 조회",postRepository.selectPostOne(postId));
+        ResponseVO<PostViewVO> responseData = new ResponseVO<>("성공",postRepository.selectPostOne(postId));
         return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
