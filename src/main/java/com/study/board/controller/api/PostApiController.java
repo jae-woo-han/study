@@ -81,4 +81,14 @@ public class PostApiController {
         return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
+    @GetMapping("/post/{postId}/view")
+    public ResponseEntity<ResponseVO> getPostViewAndUpdateViewCountByPostId(
+            @PathVariable("postId") int postId
+    ){
+        PostViewVO postViewVO = postRepository.selectPostOne(postId);
+        postRepository.updateViewCount(postId,postViewVO.getViewCount()+1);
+        ResponseVO<PostViewVO> responseData = new ResponseVO<>("게시글 조회",postRepository.selectPostOne(postId));
+        return new ResponseEntity<>(responseData, null, HttpStatus.OK);
+    }
+
 }

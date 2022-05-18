@@ -2,6 +2,7 @@ package com.study.board.repository;
 
 import com.study.board.vo.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 @Mapper
@@ -18,4 +19,5 @@ public interface PostRepository {
     String selectPostPasswordOne(int postId);
 
     int deletePostOne(int postId);
+    int updateViewCount(@Param("postId") int postId,@Param("viewCount") int viewCount);
 }
