@@ -26,27 +26,27 @@ public class PostApiController {
     }
 
     @GetMapping("/page/{pageNum}")
-    public ResponseEntity<ResponseVO> getPostListWithPage(@PathVariable("pageNum") int pageNum, PostSearchForm postSearchForm) {
+    public ResponseEntity<ResponseVO<List<BoardItemVO>> > getPostListWithPage(@PathVariable("pageNum") int pageNum, PostSearchForm postSearchForm) {
         postSearchForm.setStart((pageNum > 0) ? (pageNum - 1) * 10 : 0);
         ResponseVO<List<BoardItemVO>> responseData = new ResponseVO<>("페이지 리스트",postRepository.selectBoardViewList(postSearchForm));
         return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
     @GetMapping("/page")
-    public ResponseEntity<ResponseVO> getPaging(@RequestParam(value = "postSearchForm", required = false) PostSearchForm postSearchForm) {
+    public ResponseEntity<ResponseVO<PageApiVO>> getPaging(@RequestParam(value = "postSearchForm", required = false) PostSearchForm postSearchForm) {
         PageApiVO pageApiVO = new PageApiVO(postRepository.selectPostCount(postSearchForm));
         ResponseVO<PageApiVO> responseData = new ResponseVO<>("페이징",pageApiVO);
         return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<ResponseVO> getPostViewByPostId(@PathVariable("postId") int postId) {
+    public ResponseEntity<ResponseVO<PostViewVO>> getPostViewByPostId(@PathVariable("postId") int postId) {
         ResponseVO<PostViewVO> responseData = new ResponseVO<>("게시글 조회",postRepository.selectPostOne(postId));
         return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
     @PostMapping("/post")
-    public ResponseEntity<ResponseVO> writePostViewByPostId(@RequestBody @Validated PostCreateForm postCreateForm) {
+    public ResponseEntity<ResponseVO<PostViewVO>> writePostViewByPostId(@RequestBody @Validated PostCreateForm postCreateForm) {
         log.debug("post create form : {}", postCreateForm.toString());
         postRepository.insertPost(postCreateForm);
         ResponseVO<PostViewVO> responseData = new ResponseVO<>("등록 되었습니다",postRepository.selectPostOne(postCreateForm.getPostId()));
@@ -54,7 +54,7 @@ public class PostApiController {
     }
 
     @PutMapping("/post")
-    public ResponseEntity<ResponseVO> updatePostViewByPostId(@RequestBody PostUpdateForm postUpdateForm) {
+    public ResponseEntity<ResponseVO<Integer>> updatePostViewByPostId(@RequestBody PostUpdateForm postUpdateForm) {
         log.debug("post update form : {}", postUpdateForm.toString());
         postRepository.updatePostOne(postUpdateForm);
         ResponseVO<Integer> responseData = new ResponseVO<>("수정 되었습니다",postUpdateForm.getPostId());
@@ -62,14 +62,14 @@ public class PostApiController {
     }
 
     @DeleteMapping("/post/{postId}")
-    public ResponseEntity<ResponseVO> deletePostByPostId(@PathVariable("postId") int postId) {
+    public ResponseEntity<ResponseVO<Boolean>> deletePostByPostId(@PathVariable("postId") int postId) {
         postRepository.deletePostOne(postId);
         ResponseVO<Boolean> responseData = new ResponseVO<>("삭제 되었습니다.",true);
         return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
 
     @PostMapping("/check/password/{postId}")
-    public ResponseEntity<ResponseVO> checkPassword(
+    public ResponseEntity<ResponseVO<Boolean>> checkPassword(
             @PathVariable("postId") int postId
             , @RequestBody Map<String,String> passwordData) {
         log.debug("비밀번호 확인 : {}",passwordData);
@@ -86,7 +86,7 @@ public class PostApiController {
     }
 
     @GetMapping("/post/{postId}/view")
-    public ResponseEntity<ResponseVO> getPostViewAndUpdateViewCountByPostId(
+    public ResponseEntity<ResponseVO<PostViewVO>> getPostViewAndUpdateViewCountByPostId(
             @PathVariable("postId") int postId
     ){
         PostViewVO postViewVO = postRepository.selectPostOne(postId);
