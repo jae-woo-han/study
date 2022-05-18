@@ -48,7 +48,14 @@ public class PostApiController {
     @PostMapping("/post")
     public ResponseEntity<ResponseVO<PostViewVO>> writePostViewByPostId(@RequestBody @Validated PostCreateForm postCreateForm) {
         log.debug("post create form : {}", postCreateForm.toString());
-        postRepository.insertPost(postCreateForm);
+
+        //비밀번호 확인
+        if(StringUtils.equals(postCreateForm.getPassword(),postCreateForm.getPasswordConfirm())){
+            postRepository.insertPost(postCreateForm);
+        }else{
+            return new ResponseEntity<>(new ResponseVO<>("비밀번호 확인",new PostViewVO()),null, HttpStatus.OK);
+        }
+
         ResponseVO<PostViewVO> responseData = new ResponseVO<>("성공",postRepository.selectPostOne(postCreateForm.getPostId()));
         return new ResponseEntity<>(responseData, null, HttpStatus.OK);
     }
