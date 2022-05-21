@@ -62,7 +62,7 @@ public class FileController {
      * @return
      * @throws IOException
      */
-    @GetMapping("/")
+    @GetMapping("/files")
     public String listUploadedFiles(Model model) throws IOException {
 
         model.addAttribute("files", storageService.loadAll().map(
