@@ -36,7 +36,7 @@ public class FileApiController {
     }
 
     @PostMapping("/files/{postId}")
-    public ResponseEntity<ResponseVO> handleFileListUpload(
+    public ResponseEntity<ResponseVO<String>> handleFileListUpload(
             @RequestParam("files")List<MultipartFile> files,
             @PathVariable("postId") int postId
             ){
